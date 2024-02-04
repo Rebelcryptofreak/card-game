@@ -1,0 +1,58 @@
+import random
+
+# Define the deck of cards
+cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'] * 4
+
+# Shuffle the deck
+random.shuffle(cards)
+
+# Deal two cards to each player
+player1_hand = [cards.pop() for _ in range(2)]
+player2_hand = [cards.pop() for _ in range(2)]
+
+# Define the values of the cards
+card_values = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'J': 10, 'Q': 10, 'K': 10, 'A': 11}
+
+# Calculate the value of a hand
+def hand_value(hand):
+    value = sum([card_values[card] for card in hand])
+    if value > 21 and 'A' in hand:
+        value -= 10
+    return value
+
+# Play the game
+while True:
+    # Print the players' hands
+    print(f'Player 1: {player1_hand} ({hand_value(player1_hand)})')
+    print(f'Player 2: {player2_hand} ({hand_value(player2_hand)})')
+
+    # Ask player 1 to hit or stand
+    if hand_value(player1_hand) < 21:
+        action = input('Player 1, do you want to hit or stand? ')
+        if action.lower() == 'hit':
+            player1_hand.append(cards.pop())
+        elif action.lower() == 'stand':
+            break
+
+    # Ask player 2 to hit or stand
+    if hand_value(player2_hand) < 21:
+        if hand_value(player2_hand) < 17:
+            player2_hand.append(cards.pop())
+        else:
+            break
+
+# Print the final hands
+print(f'Player 1: {player1_hand} ({hand_value(player1_hand)})')
+print(f'Player 2: {player2_hand} ({hand_value(player2_hand)})')
+
+# Determine the winner
+if hand_value(player1_hand) > 21:
+    print('Player 2 wins!')
+elif hand_value(player2_hand) > 21:
+    print('Player 1 wins!')
+elif hand_value(player1_hand) > hand_value(player2_hand):
+    print('Player 1 wins!')
+elif hand_value(player2_hand) > hand_value(player1_hand):
+    print('Player 2 wins!')
+else:
+    print('It\'s a tie!')
